@@ -7,7 +7,7 @@
     \date{\today}
     \maketitle
 
-    \begin{enumerate}
+    \begin{enumerate}[label=\textbf{(\Roman*)}]
         \item Derive the expression of likelihood and prior for a heteroscedastic setting for a single data point with input \(x_n\) and output \(t_n\).
         
         Consider the following formula for the target variable:
@@ -21,17 +21,16 @@
         The prior is given by:
         \[p(\mathbf{w}) = \mathcal{N}(\mathbf{w} | \mathbf{m_0}, \mathbf{S_0})\]
 
-        which is identical to the homoscedastic setting, because the prior distribution of weights is not affected by the variance of the input.
+        Here, \(m_0\) is the mean of the prior distribution and \(S_0\) is the covariance matrix.
 
-        % which is essentially the same as homoscedastic case. Why I am writing all this is beyond me.
-
+        In a homoscedastic setting, we may assume that \(S_0 = \mathbf{\beta}^{-1} I\), where I is the identity matrix. However, in a heteroscedastic setting, we obviously cannot, and instead \(S_0\) will be an arbitrary diagonal matrix (because the variables are independent, but not identically distributed).
 
         \item Provide the expression for the objective function that you will consider for the ML and MAP estimation of the parameters considering a data set of size N.
         
         The objective function for ML estimation is given by:
         \begin{align}
-            \cpr{\mathcal{D}}{\mathbf{w}} &= \prod_{n = 1}^{N} \sqrt{\frac{\beta_n}{2\pi}} \exp \cbrak{- \frac{\beta_n}{2} \brak{t_n - y(x_n, \mathbf{w})}^2} \\
-            \equiv -\ln p(\mathcal{D} | \mathbf{w}) &= \frac{N}{2} \ln \beta_n - \frac{N}{2} \ln (2\pi) - \frac{1}{2} \sum_{n = 1}^{N} \beta_n \brak{t_n - y(x_n, \mathbf{w})}^2 \label{eq:ml}
+            \cpr{\mathcal{D}}{\mathbf{w}, \boldsymbol{\beta}} &= \prod_{n = 1}^{N} \sqrt{\frac{\beta_n}{2\pi}} \exp \cbrak{- \frac{\beta_n}{2} \brak{t_n - y(x_n, \mathbf{w})}^2} \\
+            \equiv \ln p &= \text{constant} + \frac{1}{2} \sum_{n = 1}^{N} \beta_n \brak{t_n - y(x_n, \mathbf{w})}^2 \label{eq:ml}
         \end{align}
 
         which is equivalent to minimizing the weighted sum of squared errors.
@@ -40,10 +39,10 @@
 
         \begin{align}
             \cpr{\mathcal{D}}{\mathbf{w}} \spr{\mathbf{w}} &= \prod_{n = 1}^{N} \sqrt{\frac{\beta_n}{2\pi}} \exp \cbrak{- \frac{\beta_n}{2} \brak{t_n - y(x_n, \mathbf{w})}^2} \mathcal{N}(\mathbf{w} | \mathbf{m_0}, \mathbf{S_0}) \\
-            \equiv -\ln p(\mathcal{D} | \mathbf{w}) - \ln p(\mathbf{w}) &= \frac{N}{2} \ln \beta_n - \frac{N}{2} \ln (2\pi) - \frac{1}{2} \sum_{n = 1}^{N} \beta_n \brak{t_n - y(x_n, \mathbf{w})}^2 + \frac{1}{2} (\mathbf{w - m_0})^T \mathbf{S_0}^{-1} (\mathbf{w - m_0})
+            \equiv \ln p(\mathcal{D} | \mathbf{w}) + \ln p(\mathbf{w}) &=\\  \text{constant} &- \frac{1}{2} \sum_{n = 1}^{N} \beta_n \brak{t_n - y(x_n, \mathbf{w})}^2 + \frac{1}{2} (\mathbf{w - m_0})^T \mathbf{S_0}^{-1} (\mathbf{w - m_0})
         \end{align}
 
-        \item Show \[E_\mathcal{D} = \sum_{n = 1}^{N} r_n \cbrak{t_n - \mathbf{w^t \phi(x_n)}}^2 \] and find \(\mathbf{w}\) that minimizes \(E_\mathcal{D}\).
+        \item Show \[E_\mathcal{D} = \sum_{n = 1}^{N} r_n \cbrak{t_n - \mathbf{w^T \phi(x_n)}}^2 \] and find \(\mathbf{w}\) that minimizes \(E_\mathcal{D}\).
         
         Reframing ~\ref{eq:ml} in the style of the homoscedastic case, we have \[-\ln p(\mathcal{D} | \mathbf{w}) = \frac{N}{2} \ln \beta_n - \frac{N}{2} \ln (2\pi) - E_\mathcal{D}\] whence it is evident that \[E_\mathcal{D} = \inv{2} \sum_{n = 1}^{N} \beta_n \cbrak{t_n - \mathbf{w^T \phi(x_n)}}^2 \label{eq:ED} \]
 
@@ -57,9 +56,13 @@
 
         \[ \sum_{n = 1}^{N} t_n \beta_n \phi_n^T = \mathbf{w^T}\sum_{n = 1}^{N} \beta_n \mathbf{\phi\brak{x_n}\phi\brak{x_n}^T}\]
 
-        and thus, 
-        \[\mathbf{w_{ML}} = \mathcal{A^\dagger} \mathbf{t}\]
-        where \(\mathcal{A}\) is the design matrix with \(\mathcal{A}_{ij} = \beta_i \phi_j \mathbf{\brak{x_i}} \) , \(\mathbf{t}\) is the vector of targets, and \(\mathcal{A^\dagger}\) is the Moore-Pensore Pseudoinverse.
+        % and thus, 
+        Let the matrix \(\mathbf{R}\) be a diagonal matrix with \(R_{ii} = \beta_i\). Then, we have
+
+        \begin{align}
+            \Phi^T R \mathbf{t} &= (\Phi^T R \Phi) w \\
+            \implies \mathbf{w_{ML}} &= (\mathbf{\Phi^T R \Phi})^{-1} \mathbf{\Phi^T R t}
+        \end{align}
         
     \end{enumerate}
 

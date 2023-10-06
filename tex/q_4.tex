@@ -2,16 +2,20 @@
 \input{~/Code/Lang/Latex/cheatsheet.tex}
 
 \begin{document}
-    \title{Question 3}
+    \title{Question 4}
     \author{Abhay Shankar K: cs21btech11001 \& Kartheek Tammana: cs21btech11028}
     \maketitle
 
     \begin{enumerate}[label=\textbf{(\Roman*)}]
-        \item With the cross-entropy error given by \begin{equation}
-            E(\mathbf{w}) = - \sum_{n = 1}^{N} \brak{t_n \ln y_n + (1 - t_n) \ln (1 - y_n)}
+        \item 
+        Knowing the maximum likelihood function, 
+        \[\cpr{\mathbf{t}}{\mathbf{w}} = \prod_{n = 1}^{N} y_n^{t_n} (1 - y_n)^{t_n}\]
+         we can obtain the cross-entropy error function by taking negative logarithm: 
+        \begin{equation}
+            E(\mathbf{w}) = - \sum_{n = 1}^{N} \brak{t_n \ln y_n + (1 - t_n) \ln (1 - y_n)} \label{eq:cross-entropy}
         \end{equation}
-
-        we have
+        
+        Taking gradients of ~\ref{eq:cross-entropy} with respect to \(\mathbf{w}\), we have
         \begin{itemize}
             \item Gradient of the error: \[\nabla E(\mathbf{w}) = \sum_{n = 1}^{N} \brak{y_n - t_n} \phi_n = \mathbf{\Phi^T(y - t)}\]
             \item The Hessian: \[\nabla \nabla E(\mathbf{w}) = \sum_{n = 1}^{N} y_n (1 - y_n) \phi_n \phi_n^T = \mathbf{\Phi^T R \Phi}\] where R is the diagonal matrix given by \(R_{nn} = y_n (1 - y_n)\)
@@ -41,12 +45,32 @@ def update(w, Phi, t):
     return np.linalg.inv(Phi.T @ R @ Phi) @ Phi.T @ R @ z
         \end{lstlisting}
 
-
-
-
         \item 
-        \item The weighing matrix \(R\) is not constant, but depends on the parameter vector \(\mathbf{w}\).
-        
-        Thus, we must apply the normal equations iteratively, each time using the new weight vector \(\mathbf{w}\) to compute a revised weighing matrix \(R\). So, the algorithm is known as iterative reweighted least squares (IRLS).
+        \begin{itemize}
+            \item Modifying ~\ref{eq:update}, we get 
+            \[(\mathbf{\Phi^T R \Phi}) \mathbf{w} = \mathbf{\Phi^T R z}\]
+    
+            which is the normal equation for weighted least squares. Thus, the new weight vector \(\mathbf{w}^{(new)}\) is the solution to the weighted least squares problem with \(\mathbf{z}\) and the weighing matrix \(\mathbf{R}\).
+            
+            \item The weighing matrix \(R\) is not constant, but depends on the parameter vector \(\mathbf{w}\).
+            
+            Thus, we must apply the normal equations iteratively, each time using the new weight vector \(\mathbf{w}\) to compute a revised weighing matrix \(R\). So, the algorithm is known as iterative reweighted least squares (IRLS).
+        \end{itemize}
+        \item 
+        With the Hessian: \[\mathbf{H} = \mathbf{\Phi^T R \Phi}\]
+
+        We know that a function is concave if it's Hessian is positive definite. Thus, it is sufficient to prove positive-definiteness of the Hessian.
+
+        Expanding \(u^T \mathbf{H} u\), we can prove positive-definiteness \begin{align}
+            \begin{split}
+                u^T \mathbf{H} u &= u^T \mathbf{\Phi^T R \Phi} u \\
+                &= (u^T \mathbf{\Phi^T}) \mathbf{R} (\mathbf{\Phi u}) \\
+                &= \sum_{n = 1}^{N} u^T \mathbf{\phi_n}^T R_{nn} \mathbf{\phi_n u} \\
+                &= \sum_{n = 1}^{N} R_{nn} \brak{\mathbf{\phi_n u}}^2 \\
+                &> 0
+            \end{split}
+        \end{align}
+
+
     \end{enumerate}
 \end{document}
