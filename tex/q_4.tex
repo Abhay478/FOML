@@ -7,12 +7,15 @@
     \maketitle
 
     \begin{enumerate}[label=\textbf{(\Roman*)}]
-        \item 
+        \item With the cross-entropy error given by \begin{equation}
+            E(\mathbf{w}) = - \sum_{n = 1}^{N} \brak{t_n \ln y_n + (1 - t_n) \ln (1 - y_n)}
+        \end{equation}
+
+        we have
         \begin{itemize}
             \item Gradient of the error: \[\nabla E(\mathbf{w}) = \sum_{n = 1}^{N} \brak{y_n - t_n} \phi_n = \mathbf{\Phi^T(y - t)}\]
             \item The Hessian: \[\nabla \nabla E(\mathbf{w}) = \sum_{n = 1}^{N} y_n (1 - y_n) \phi_n \phi_n^T = \mathbf{\Phi^T R \Phi}\] where R is the diagonal matrix given by \(R_{nn} = y_n (1 - y_n)\)
             \item Update function: \[\mathbf{w}^{(new)} = \mathbf{w}^{(old)} - \mathbf{H}^{-1} \nabla E(\mathbf{w}) = \]
-            
             \begin{align}
                 \begin{split}
                     \mathbf{w}^{(new)} &= \mathbf{w}^{(old)} - \mathbf{H}^{-1} \nabla E(\mathbf{w}) \\
@@ -25,16 +28,25 @@
             with \[\mathbf{z} = \mathbf{\Phi w}^{(old)} - \mathbf{R^{-1} (y - t)}\]
         \end{itemize}
 
-        where \(\mathbf{\Phi}\) is the N × M design matrix, whose n'th row is given by \(\phi_n^T\).
-        \item Taking the gradient of the weighted least squares error,
-        
-        \begin{align}
-            \begin{split}
-                \nabla E(\mathbf{w}) = \sum_{n = 1}^{N} r_n (\mathbf{w^T} \phi_n - t_n) \phi_n^T = \mathbf{\Phi^T R \Phi w} - \mathbf{\Phi^T R t}
-            \end{split}
-        \end{align}
+        where \(\mathbf{\Phi}\) is the N × M design matrix, whose n'th row is given by \(\phi_n^T\), and \(y_n = \sigma(\mathbf{w}^T \phi_n)\).
 
-        with \(R_{nn} = r_n\). This is clearly the same form 
+        The algorithm for update, implemented in python:
+
+        \begin{lstlisting}[language=Python]
+import numpy as np
+def update(w, Phi, t):
+    y =  mp.array([sigmoid(p @ w) for p in Phi])
+    R = np.diag(y * (1 - y))
+    z = Phi @ w - np.linalg.inv(R) @ (y - t)
+    return np.linalg.inv(Phi.T @ R @ Phi) @ Phi.T @ R @ z
+        \end{lstlisting}
+
+
+
+
         \item 
+        \item The weighing matrix \(R\) is not constant, but depends on the parameter vector \(\mathbf{w}\).
+        
+        Thus, we must apply the normal equations iteratively, each time using the new weight vector \(\mathbf{w}\) to compute a revised weighing matrix \(R\). So, the algorithm is known as iterative reweighted least squares (IRLS).
     \end{enumerate}
 \end{document}

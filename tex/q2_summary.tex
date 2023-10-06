@@ -12,13 +12,19 @@
     % \end{abstract}
     
     \maketitle
-    \section{Introduction}
+
+    \section{Paper Summary}
+
+    \begin{enumerate}[label=\textbf{(\Roman*)}]
+        \item Introduction
 
     Wall of text, will parse and write later.
 
-    \section{The Proportional Odds model}
-        \subsection{The model}
-        The probabilities of the \(k\) ordered categories of the response variable \(Y\) are given by \(\seq{\pi}{k}\), as a function of the covariant vector \(\mathbf{x}\).
+    \item The Proportional Odds model
+        \begin{itemize}
+            \item The model
+            
+            The probabilities of the \(k\) ordered categories of the response variable \(Y\) are given by \(\seq{\pi}{k}\), as a function of the covariant vector \(\mathbf{x}\).
 
         Given the following quantities,
         \begin{itemize}
@@ -48,9 +54,9 @@
     
         where \(\Delta = \boldsymbol{\beta^T} \brak{\mathbf{x_2 - x_1}}\). \{Copilot says this, not sure. MF has not declared Delta.\}
 
-        \subsection{Generalised Empirical Logit transform}
-
-        Consider the data matrix with cumulative row sums \(R_{ij}\) and \(n_i = R_{ik}\). Furthermore, \( \Sigma_i R_{ij} = R_{.j}\) and \(\Sigma_i n_{ij} = n_{.j}\) We have the \(j\)th sample logit \(\tilde{\lambda}_{ij} = \log \frac{R_{ij} + 0.5}{n_i - R_{ij} + 0.5}\). The extra 0.5 is due to reduce bias and avoid zeros. 
+            \item Generalised Empirical Logit transform
+            
+            Consider the data matrix with cumulative row sums \(R_{ij}\) and \(n_i = R_{ik}\). Furthermore, \( \Sigma_i R_{ij} = R_{.j}\) and \(\Sigma_i n_{ij} = n_{.j}\) We have the \(j\)th sample logit \(\tilde{\lambda}_{ij} = \log \frac{R_{ij} + 0.5}{n_i - R_{ij} + 0.5}\). The extra 0.5 is due to reduce bias and avoid zeros. 
         
         The paper references the results of another paper and asserts that the expectation of the sample logit is \(\lambda_{ij} + \bigO{n_i^{-2}}\) . Let
 
@@ -61,10 +67,10 @@
         where \(\gamma_j = \frac{\kappa_j}{1 + \kappa_j}\) from ~\ref{eq:delta} and ~\ref{eq:logit}. Using these weights, the asymptotic variance of \(\tilde{\Delta} = Z_2 - Z_1\) is \[\var{\tilde{\Delta}} = \cbrak{\frac{n_1 n_2}{n}\sum_{j = 1}^{k - 1} \gamma_j(1 - \gamma_j)(\pi_j + \pi_{j + 1})}^{-1} + \bigO{\Delta^2} \]
 
         The quantity \(Z_i\) with weights given by \[w_j \propto R_{.j}(1 - R_{.j})(n_{.j} + n_{.j + 1})\] is called the generalised empirical logistic transform for the \(i\)'th group.
+        \end{itemize}
 
-    \section{The Proportional Hazards model}
-
-    \subsection{The model}
+    \item The Proportional Hazards model
+    
 
         The hazard function is defined as the probability of failure at time \(t\), conditional on survival up to time \(t\). The proportional hazards model assumes that the hazard function is of the form 
         \[\lambda(t) = \lambda_0(t) \exp \brak{- \boldsymbol{\beta^T} \mathbf{x}}\] 
@@ -84,19 +90,28 @@
         Taking logarithm, we obtain the complementary log-log transform.
         \[\log \sbrak{ - \log \cbrak{1 - \gamma_j (\mathbf{x})}} = \theta_j - \boldsymbol{\beta^T x} \]
 
-        \section{Properties of related linear models}
 
+    \item Properties of related linear models
+    
         Both the above models have the same general form, namely \[link\cbrak{\gamma_j(\mathbf{x})} = \theta_j - \boldsymbol{\beta^T x} \]
 
         The paper then suggests a few alternative link functions, such as the inverse Gaussian or the inverse Cauchy transform.
 
         The paper goes on to discuss invariances of the models, and proposes invariance under reversal of the ordering of categories as an appropriate property. 
 
-    \section{Elaboration}
-
+    \item Elaboration
+    
     The rest of the paper contains a more thorough analysis of the two above models.
 
+    \end{enumerate}
+
+    \section{Parameter Estimation}
+
     
+
+    \section{Code}
+
+    Refer to \texttt{wine.ipynb}.
 
 
 \end{document}
