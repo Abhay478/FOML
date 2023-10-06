@@ -1,0 +1,40 @@
+\documentclass{amsart}
+\input{~/Code/Lang/Latex/cheatsheet.tex}
+
+\begin{document}
+    \title{Question 3}
+    \author{Abhay Shankar K: cs21btech11001 \& Kartheek Tammana: cs21btech11028}
+    \maketitle
+
+    \begin{enumerate}[label=\textbf{(\Roman*)}]
+        \item 
+        \begin{itemize}
+            \item Gradient of the error: \[\nabla E(\mathbf{w}) = \sum_{n = 1}^{N} \brak{y_n - t_n} \phi_n = \mathbf{\Phi^T(y - t)}\]
+            \item The Hessian: \[\nabla \nabla E(\mathbf{w}) = \sum_{n = 1}^{N} y_n (1 - y_n) \phi_n \phi_n^T = \mathbf{\Phi^T R \Phi}\] where R is the diagonal matrix given by \(R_{nn} = y_n (1 - y_n)\)
+            \item Update function: \[\mathbf{w}^{(new)} = \mathbf{w}^{(old)} - \mathbf{H}^{-1} \nabla E(\mathbf{w}) = \]
+            
+            \begin{align}
+                \begin{split}
+                    \mathbf{w}^{(new)} &= \mathbf{w}^{(old)} - \mathbf{H}^{-1} \nabla E(\mathbf{w}) \\
+                            &= \mathbf{w}^{(old)} - (\mathbf{\Phi^T R \Phi})^{-1} \mathbf{\Phi^T(y - t)} \\
+                            &= (\mathbf{\Phi^T R \Phi})^{-1} \brak{\mathbf{\Phi^T R \Phi w}^{(old)} - \mathbf{\Phi^T(y - t)}} \\
+                            &= (\mathbf{\Phi^T R \Phi})^{-1} \mathbf{\Phi^T R z} \label{eq:update}
+                \end{split}
+            \end{align}
+
+            with \[\mathbf{z} = \mathbf{\Phi w}^{(old)} - \mathbf{R^{-1} (y - t)}\]
+        \end{itemize}
+
+        where \(\mathbf{\Phi}\) is the N × M design matrix, whose n'th row is given by \(\phi_n^T\).
+        \item Taking the gradient of the weighted least squares error,
+        
+        \begin{align}
+            \begin{split}
+                \nabla E(\mathbf{w}) = \sum_{n = 1}^{N} r_n (\mathbf{w^T} \phi_n - t_n) \phi_n^T = \mathbf{\Phi^T R \Phi w} - \mathbf{\Phi^T R t}
+            \end{split}
+        \end{align}
+
+        with \(R_{nn} = r_n\). This is clearly the same form 
+        \item 
+    \end{enumerate}
+\end{document}
