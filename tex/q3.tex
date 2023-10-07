@@ -1,5 +1,5 @@
 \documentclass{amsart}
-\input{~/Code/Lang/Latex/cheatsheet.tex}
+\input{cheatsheet.tex}
 
 \begin{document}
     \title{Question 3}
@@ -12,8 +12,9 @@
         
         Consider the following formula for the target variable:
         \[t = y(\mathbf{x, w}) + \epsilon(\mathbf{x})\] where \(\epsilon\) is a zero mean Gaussian random variable with precision \(\beta(\mathbf{x})\). 
+        Due to heteroscedasticity, the Gaussian noise is dependent on the input \(\mathbf{x}\). 
         
-        Due to heteroscedasticity, the Gaussian noise is dependent on the input \(\mathbf{x}\). Due to the properties of Gaussian distribution, \(t\) is also normal, with its distrbution i.e. the likelihood function given by:
+        Due to the properties of Gaussian distribution, \(t\) is also normal, with its distrbution i.e. the likelihood function given by:
 
         \[p\brak{t_n | \mathbf{x_n}, \mathbf{w}, \boldsymbol{\beta}} = \sqrt{\frac{\beta_n}{2\pi}} \exp \cbrak{- \frac{\beta_n}{2} \brak{t_n - y( \mathbf{x_n, w})}^2}\]
 
