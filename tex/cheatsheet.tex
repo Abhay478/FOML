@@ -44,7 +44,7 @@
 
 
 %LINALG
-\newcommand{\cond}[2]{#1 \middle| #2}
+\newcommand*{\cond}[2]{{#1} \middle| {#2}}
 \DeclareMathOperator*{\uni}{\exists !} % unique
 \DeclareMathOperator*{\all}{\forall} % eh
 \DeclareMathOperator*{\bas}{<<} % is a (ordered) basis of
@@ -117,8 +117,9 @@
 \newcommand*{\permcomb}[4][0mu]{{{}^{#3}\mkern#1#2_{#4}}} % P and C
 \newcommand*{\perm}[1][-3mu]{\permcomb[#1]{P}}
 \newcommand*{\comb}[1][-1mu]{\permcomb[#1]{C}}
-\newcommand{\ev}[1]{\mathcal{E}\sbrak{#1}}
-\newcommand{\var}[1]{\textbf{Var}\sbrak{#1}}
+\newcommand{\ev}[1]{\mathbb{E}\sbrak{#1}}
+\newcommand{\cov}[1]{\text{cov}\sbrak{#1}}
+\newcommand{\var}[1]{\text{var}\sbrak{#1}}
 
 %TOC
 \newcommand{\is}[2]{\textbf{\underline{#1}}: {#2}

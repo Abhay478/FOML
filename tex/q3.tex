@@ -11,70 +11,116 @@
         \item Derive the expression of likelihood and prior for a heteroscedastic setting for a single data point with input \(\mathbf{x_n}\) and output \(t_n\).
         
         Consider the following formula for the target variable:
-        \[t = y(\mathbf{x, w}) + \epsilon(\mathbf{x})\] where \(\epsilon\) is a zero mean Gaussian random variable with precision \(\beta(\mathbf{x})\) and \(y\) is a deterministic function. 
+        \[t = \mathbf{w^T} \boldsymbol{\phi}(\mathbf{x}) + \epsilon(\mathbf{x})\] where \(\epsilon\) is a zero mean Gaussian random variable with precision \(\beta(\mathbf{x})\) and \(\boldsymbol{\phi}\) is a deterministic function. 
         Due to heteroscedasticity, the Gaussian noise is dependent on the input \(\mathbf{x}\). 
         
         Due to the properties of Gaussian distribution, \(t\) is also normal, with its distrbution i.e. the likelihood function given by:
 
-        \[p\brak{t_n | \mathbf{x_n}, \mathbf{w}, \boldsymbol{\beta}} = \sqrt{\frac{\beta_n}{2\pi}} \exp \cbrak{- \frac{\beta_n}{2} \brak{t_n - y( \mathbf{x_n, w})}^2}\]
+        \[
+        p\brak{t_n | \mathbf{x}_n, \mathbf{w}, \boldsymbol{\beta}} 
+            = 
+        \sqrt{\frac{\beta_n}{2\pi}} \exp \cbrak{- \frac{\beta_n}{2} \brak{t_n - \mathbf{w^T} \boldsymbol{\phi}(\mathbf{x}_n)}^2}\]
+
+
+
+        So, we can say
+        \[p\brak{t_n | \mathbf{x_n}, \mathbf{w}, \boldsymbol{\beta}} = \mathcal{N} (t_n | \mathbf{w^T} \boldsymbol{\phi}(\mathbf{x}_n), \beta^{-1})\]
 
 
         The prior is given by:
         \[p(\mathbf{w}) = \mathcal{N}(\mathbf{w} | \mathbf{m_0}, \mathbf{S_0})\]
 
-        Here, \(m_0\) is the mean of the prior distribution and \(S_0\) is the covariance matrix.
+        Here, \(\mathbf{m_0}\) is the mean of the prior distribution and \(\mathbf{S_0}\) is the covariance matrix.
 
-        In a homoscedastic setting, we may assume that \(S_0 = \mathbf{\beta}^{-1} I\), where I is the identity matrix. However, in a heteroscedastic setting, we obviously cannot, and instead \(S_0\) will be an arbitrary diagonal matrix (because the variables are independent, but not identically distributed).
+        % In a homoscedastic setting, \(\forall i, \beta_i = \beta\) we may assume that \(\mathbf{S_0} = \mathbf{\beta}^{-1} I\), where I is the identity matrix. However, in a heteroscedastic setting, we obviously cannot, and instead \(S_0\) will be an arbitrary diagonal matrix (because the variables are independent, but not identically distributed).
 
         \item Provide the expression for the objective function that you will consider for the ML and MAP estimation of the parameters considering a data set of size N.
+
+        \begin{enumerate}[label=\textbf{(\alph*)}]
+            \item To express this more succinctly, we define the design matrix \[\boldsymbol{\Phi} = \myvec{\boldsymbol{\phi}(\mathbf{x}_1) \\ \vdots \\ \boldsymbol{\phi}(\mathbf{x}_n)} \]
+            the data set \(\mathbf{X} = \seq{\mathbf{x}}{n}\)
+            and the weighing matrix \(\mathbf{R}\) with \(R_{ii} = \beta_i\).
+            
+            Thus, the objective function for ML estimation is given by:
+            \begin{align}
+                \begin{split}
+                    \cpr{\mathbf{t}}{\mathbf{X}, \mathbf{w}, \boldsymbol{\beta}}  
+                    &= \prod_{n = 1}^{N} p\brak{t_n | \mathbf{x_n}, \mathbf{w}, \boldsymbol{\beta}} \\
+                    &= \prod_{n = 1}^{N} \mathcal{N} (t_n | \mathbf{w^T} \boldsymbol{\phi}(\mathbf{x}_n), \beta_n^{-1}) \\
+                    &= \exp \cbrak{- \frac{1}{2} \sum_{n = 1}^{N} \beta_n \brak{t_n - \mathbf{w^T} \boldsymbol{\phi}(\mathbf{x}_n)}^2} \\
+                    &= \exp \cbrak{- \frac{1}{2} \brak{\mathbf{t} - \boldsymbol{\Phi^T w}}^T \mathbf{R} \brak{\mathbf{t} - \boldsymbol{\Phi^T w}}} \\
+                    &= \mathcal{N} (\mathbf{t}|\mathbf{\Phi w, R^{-1}}) \label{eq:ml} 
+                \end{split}
+                % \equiv \ln p &= \text{constant} + \frac{1}{2} \sum_{n = 1}^{N} \beta_n \brak{t_n - y(\mathbf{x_n, w})}^2 
+            \end{align}
+            \item 
+                Given
+                    \[p(\mathbf{w}) = \mathcal{N}(w|\mathbf{m_0, S_0})\]
+                and
+                    \[p(\mathbf{t|w}) = \mathcal{N}(\mathbf{\Phi w, R^{-1}})\]
+
+
+                The objective function for MAP estimation is given by the normal distrbution with mean \(\boldsymbol{\mu}\) and variance \(\boldsymbol{\Sigma}\) where 
+
+                % \[p(\mathbf{w|t}) = \mathcal{N}(\mathbf{w}|\mu, \Sigma)\]
+                \begin{itemize}
+                    \item \(\boldsymbol{\Sigma} = (\mathbf{S_0}^{-1} + \mathbf{\Phi^T R \Phi})^{-1}\)
+                    \item \(\boldsymbol{\mu} = \boldsymbol{\Sigma} (\mathbf{S_0}^{-1} \mathbf{m_0} + \mathbf{\Phi^T R t})\)
+                \end{itemize}
+
+                % Thus, we have \[p(\mathbf{w|t}) = \mathcal{N} \brak{\mathbf{w}|(\mathbf{S_0}^{-1} + \mathbf{\Phi^T R \Phi})^{-1}(\mathbf{S_0}^{-1} \mathbf{m_0} + \mathbf{\Phi^T R t}), (\mathbf{S_0}^{-1} + \mathbf{\Phi^T R \Phi})^{-1}}\]
+
+                This can be derived using the quantity \(\mathbf{z} = \myvec{\mathbf{w} \\ \mathbf{t}}\) as follows:
+                \begin{align}
+                    \begin{split}
+                        \ln p(\mathbf{z}) &= \ln p(\mathbf{w}) + \ln p(\mathbf{t|w}) \\
+                            &= -\inv{2} (\mathbf{w - m_0})^T \mathbf{S_0}^{-1} (\mathbf{w - m}_0) \\
+                            &\ - \inv{2} (\mathbf{t - \Phi w})^T \mathbf{R} (\mathbf{t - \Phi w}) + \text{constant} \label{eq:map1}
+                    \end{split}
+                \end{align}
+
+                Furthermore, due to linearity of expectation, we have 
+                \[\ev{\mathbf{z}} = \myvec{\ev{\mathbf{w}} \\ \ev{\mathbf{t}}}\]
+                from which
+                \[\cov{\mathbf{z}} = \myvec{
+                    \var{\mathbf{w}} & \cov{\mathbf{w}, \mathbf{t}} \\
+                    \cov{\mathbf{t}, \mathbf{w}} & \var{\mathbf{t}}
+                }\]
+
+                % We can partition ~\ref{eq:map1} into \(\mathbf{w}, \mathbf{t}\): 
+                % \[- \inv{2} (\mathbf{t - \Phi^T w})^T \mathbf{R} (\mathbf{t - \Phi^T w}) = \]
+
+                From ~\ref{eq:map1}, it is clear that \(p(\mathbf{z})\) is a Gaussian distribution. Now we complete the square.
+                
+                To find the covariance of \(\mathbf{w|t}\), we consider the single term of second order in \(\mathbf{w}\) from ~\ref{eq:map1}: 
+                % \[\inv{2} \mathbf{z^T \Sigma}^{-1}\mathbf{z} = \inv{2} \sbrak{ - \mathbf{w^T}(\mathbf{S_0}^{-1} + \mathbf{\Phi R \Phi^T})\mathbf{w} - \mathbf{t^T R t} + \mathbf{t^T R \Phi^T w} + \mathbf{w^T \Phi R t}}\]
+                % which reduces to 
+                % \[-\inv{2} \mathbf{z^T} \myvec{\mathbf{S_0}^{-1} + \mathbf{\Phi R \Phi^T} & -\mathbf{\Phi R} \\ -\mathbf{R \Phi^T} & \mathbf{R}} \mathbf{z}\]
+
+                \[\inv{2} \mathbf{w^T \Sigma}^{-1}\mathbf{w} = \inv{2} \mathbf{w^T}(\mathbf{S_0}^{-1} + \mathbf{\Phi R \Phi^T})\mathbf{w} \]
+
+                We treat \(\mathbf{t}\) as a constant.
+
+                Thus, the covariance is given by \[\mathbf{\Sigma} = (\mathbf{S_0}^{-1} + \mathbf{\Phi^T R \Phi})^{-1}\]
+
+                % And the covariance matrix by 
+                % \begin{equation}
+                %     cov\sbrak{\mathbf{z}} = \mathbf{\Sigma} = \myvec{
+                %     \mathbf{S_0} & \mathbf{S_0 \Phi} \\
+                %     \mathbf{\Phi^T S_0} & \mathbf{R}^{-1} + \mathbf{\Phi^T S_0 \Phi}
+                %     } \label{eq:zcov}
+                % \end{equation}
+
+                Similarly, we may obtain \(\boldsymbol{\mu}\) using the terms of ~\ref{eq:map1} of first order in \(\mathbf{w}\). We have
+
+                \[\mathbf{w^T \Sigma}^{-1} \boldsymbol{\mu} = \mathbf{w^T} \mathbf{S_0}^{-1} \mathbf{m_0} + \mathbf{w^T \Phi^T R t}\]
+                    which yields
+                \[\boldsymbol{\mu} = \boldsymbol{\Sigma} (\mathbf{S_0}^{-1} \mathbf{m_0} + \mathbf{\Phi^T R t})\]
+
+                
+        \end{enumerate}
+
         
-        With \(\mathbf{X} = \seq{\mathbf{x}}{n}\), the objective function for ML estimation is given by:
-        \begin{align}
-            \cpr{\mathbf{t}}{\mathbf{X}, \mathbf{w}, \boldsymbol{\beta}} &= \prod_{n = 1}^{N} \sqrt{\frac{\beta_n}{2\pi}} \exp \cbrak{- \frac{\beta_n}{2} \brak{t_n - y(\mathbf{x_n, w})}^2} \\
-            &= \mathcal{N} (\mathbf{t}|\mathbf{\Phi^Tw, R})\\
-            \equiv \ln p &= \text{constant} + \frac{1}{2} \sum_{n = 1}^{N} \beta_n \brak{t_n - y(\mathbf{x_n, w})}^2 \label{eq:ml}
-        \end{align}
-
-        Defining the matrix \(\mathbf{R}\) with \(R_{ii} = \beta_i\).
-
-        % which is equivalent to minimizing the weighted sum of squared errors.
-
-        % The objective function for MAP estimation, \(\cpr{\mathbf{w}}{\mathbf{t}}\) is given by
-
-        % \[\cpr{\mathbf{w}}{\mathbf{t}} = \mathcal{N} \brak{\mathbf{w | m_N, S_N}}\] where \begin{itemize}
-        %     \item \(\mathbf{S_N} = (\mathbf{S_0}^{-1} + \beta \mathbf{\Phi^T \Phi})^{-1}\)
-        %     \item \(\mathbf{m_N} = \mathbf{S_N} (S_0^{-1}m_0 + \beta \mathbf{\Phi^T t})\)
-        % \end{itemize}
-
-        % These formulae are as stated in the Bishop textbook, and the homoscedastic assumption is made after presenting the general equation. 
-        
-        %  \begin{align}
-        %     \begin{split}
-        %         \cpr{\mathbf{w}}{\mathbf{t}} &= \cpr{\mathbf{t}}{\mathbf{w}} p(\mathbf{w}) \\
-        %             &= \brak{\prod_{n = 1}^{N} \mathcal{N} (t_n | y(\mathbf{x_n, w}), \beta_n^{-1})} \mathcal{N}(\mathbf{w} | \mathbf{m_0}, \mathbf{S_0})
-        %     \end{split}
-        % \end{align}
-
-        % Substituting \(y(\mathbf{x_n, w}) = \mathbf{w^T}\boldsymbol{\phi}(\mathbf{x_n})\) and , we have
-
-        % \begin{align}
-        %     \begin{split}
-        %         \cpr{\mathbf{w}}{\mathbf{t}} &= \mathcal{N} (\mathbf{t} | \mathbf{\Phi w}, \mathbf{R^{-1}}) \mathcal{N}(\mathbf{w} | \mathbf{m_0}, \mathbf{S_0}) \\
-        %     \end{split}
-        % \end{align}
-
-        Given \begin{itemize}
-            \item \[p(\mathbf{w}) = \mathcal{N}(\mathbf{m_0, S_0})\]
-            \item \[p(t|w) = \mathcal{N}(\mathbf{\Phi^T w, R^{-1}})\]
-        \end{itemize}
-
-        The objective function for MAP estimation is given by the normal distrbution with mean \(\boldsymbol{\mu}\) and variance \(\boldsymbol{\Sigma}\) where 
-
-        % \[p(\mathbf{w|t}) = \mathcal{N}(\mathbf{w}|\mu, \Sigma)\]
-            \(\boldsymbol{\Sigma} = (\mathbf{S_0}^{-1} + \mathbf{\Phi^T R \Phi})^{-1}\)
-            \(\boldsymbol{\mu} = \boldsymbol{\Sigma} (\mathbf{S_0}^{-1} \mathbf{m_0} + \mathbf{\Phi^T R t})\)
-
-        Thus, we have \[p(\mathbf{w|t}) = \mathcal{N} \brak{\mathbf{w}|(\mathbf{S_0}^{-1} + \mathbf{\Phi^T R \Phi})^{-1}(\mathbf{S_0}^{-1} \mathbf{m_0} + \mathbf{\Phi^T R t}), (\mathbf{S_0}^{-1} + \mathbf{\Phi^T R \Phi})^{-1}}\]
 
         \item Show \[E_\mathcal{D} = \sum_{n = 1}^{N} r_n \cbrak{t_n - \mathbf{w^T \phi(x_n)}}^2 \] and find \(\mathbf{w}\) that minimizes \(E_\mathcal{D}\).
         
