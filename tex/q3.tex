@@ -8,14 +8,14 @@
     \maketitle
 
     \begin{enumerate}[label=\textbf{(\Roman*)}]
-        \item Derive the expression of likelihood and prior for a heteroscedastic setting for a single data point with input \(x_n\) and output \(t_n\).
+        \item Derive the expression of likelihood and prior for a heteroscedastic setting for a single data point with input \(\mathbf{x_n}\) and output \(t_n\).
         
         Consider the following formula for the target variable:
         \[t = y(\mathbf{x, w}) + \epsilon(\mathbf{x})\] where \(\epsilon\) is a zero mean Gaussian random variable with precision \(\beta(\mathbf{x})\). 
         
         Due to heteroscedasticity, the Gaussian noise is dependent on the input \(\mathbf{x}\). Due to the properties of Gaussian distribution, \(t\) is also normal, with its distrbution i.e. the likelihood function given by:
 
-        \[p\brak{t_n | x_n, \mathbf{w}} = \sqrt{\frac{\beta_n}{2\pi}} \exp \cbrak{- \frac{\beta_n}{2} \brak{t_n - y(x_n, \mathbf{w})}^2}\]
+        \[p\brak{t_n | \mathbf{x_n}, \mathbf{w}, \boldsymbol{\beta}} = \sqrt{\frac{\beta_n}{2\pi}} \exp \cbrak{- \frac{\beta_n}{2} \brak{t_n - y( \mathbf{x_n, w})}^2}\]
 
 
         The prior is given by:
@@ -27,20 +27,55 @@
 
         \item Provide the expression for the objective function that you will consider for the ML and MAP estimation of the parameters considering a data set of size N.
         
-        The objective function for ML estimation is given by:
+        With \(\mathbf{X} = \seq{\mathbf{x}}{n}\), the objective function for ML estimation is given by:
         \begin{align}
-            \cpr{\mathcal{D}}{\mathbf{w}, \boldsymbol{\beta}} &= \prod_{n = 1}^{N} \sqrt{\frac{\beta_n}{2\pi}} \exp \cbrak{- \frac{\beta_n}{2} \brak{t_n - y(x_n, \mathbf{w})}^2} \\
-            \equiv \ln p &= \text{constant} + \frac{1}{2} \sum_{n = 1}^{N} \beta_n \brak{t_n - y(x_n, \mathbf{w})}^2 \label{eq:ml}
+            \cpr{\mathbf{t}}{\mathbf{X}, \mathbf{w}, \boldsymbol{\beta}} &= \prod_{n = 1}^{N} \sqrt{\frac{\beta_n}{2\pi}} \exp \cbrak{- \frac{\beta_n}{2} \brak{t_n - y(\mathbf{x_n, w})}^2} \\
+            &= \mathcal{N} (\mathbf{t}|\mathbf{\Phi^Tw, R})\\
+            \equiv \ln p &= \text{constant} + \frac{1}{2} \sum_{n = 1}^{N} \beta_n \brak{t_n - y(\mathbf{x_n, w})}^2 \label{eq:ml}
         \end{align}
 
-        which is equivalent to minimizing the weighted sum of squared errors.
+        Introducing the matrix \(\mathbf{R}\) with \(R_{ii} = \beta_i\).
 
-        The objective function for MAP estimation, \(\cpr{\mathbf{w}}{\mathcal{D}} =  \cpr{\mathcal{D}}{\mathbf{w}} \spr{\mathbf{w}}\) is given by:
+        % which is equivalent to minimizing the weighted sum of squared errors.
 
-        \begin{align}
-            \cpr{\mathcal{D}}{\mathbf{w}} \spr{\mathbf{w}} &= \prod_{n = 1}^{N} \sqrt{\frac{\beta_n}{2\pi}} \exp \cbrak{- \frac{\beta_n}{2} \brak{t_n - y(x_n, \mathbf{w})}^2} \mathcal{N}(\mathbf{w} | \mathbf{m_0}, \mathbf{S_0}) \\
-            \equiv \ln p(\mathcal{D} | \mathbf{w}) + \ln p(\mathbf{w}) &=\\  \text{constant} &- \frac{1}{2} \sum_{n = 1}^{N} \beta_n \brak{t_n - y(x_n, \mathbf{w})}^2 + \frac{1}{2} (\mathbf{w - m_0})^T \mathbf{S_0}^{-1} (\mathbf{w - m_0})
-        \end{align}
+        % The objective function for MAP estimation, \(\cpr{\mathbf{w}}{\mathbf{t}}\) is given by
+
+        % \[\cpr{\mathbf{w}}{\mathbf{t}} = \mathcal{N} \brak{\mathbf{w | m_N, S_N}}\] where \begin{itemize}
+        %     \item \(\mathbf{S_N} = (\mathbf{S_0}^{-1} + \beta \mathbf{\Phi^T \Phi})^{-1}\)
+        %     \item \(\mathbf{m_N} = \mathbf{S_N} (S_0^{-1}m_0 + \beta \mathbf{\Phi^T t})\)
+        % \end{itemize}
+
+        % These formulae are as stated in the Bishop textbook, and the homoscedastic assumption is made after presenting the general equation. 
+        
+        %  \begin{align}
+        %     \begin{split}
+        %         \cpr{\mathbf{w}}{\mathbf{t}} &= \cpr{\mathbf{t}}{\mathbf{w}} p(\mathbf{w}) \\
+        %             &= \brak{\prod_{n = 1}^{N} \mathcal{N} (t_n | y(\mathbf{x_n, w}), \beta_n^{-1})} \mathcal{N}(\mathbf{w} | \mathbf{m_0}, \mathbf{S_0})
+        %     \end{split}
+        % \end{align}
+
+        % Substituting \(y(\mathbf{x_n, w}) = \mathbf{w^T}\boldsymbol{\phi}(\mathbf{x_n})\) and , we have
+
+        % \begin{align}
+        %     \begin{split}
+        %         \cpr{\mathbf{w}}{\mathbf{t}} &= \mathcal{N} (\mathbf{t} | \mathbf{\Phi w}, \mathbf{R^{-1}}) \mathcal{N}(\mathbf{w} | \mathbf{m_0}, \mathbf{S_0}) \\
+        %     \end{split}
+        % \end{align}
+
+        Given \begin{itemize}
+            \item \[p(\mathbf{w}) = \mathcal{N}(\mathbf{m_0, S_0})\]
+            \item \[p(t|w) = \mathcal{N}(\mathbf{\Phi^T w, R^{-1}})\]
+        \end{itemize}
+
+        The objective function for MAP estimation is given by the normal distrbution with mean \(\boldsymbol{\mu}\) and variance \(\boldsymbol{\Sigma}\) where 
+
+        % \[p(\mathbf{w|t}) = \mathcal{N}(\mathbf{w}|\mu, \Sigma)\]
+        \begin{itemize}
+            \item \(\boldsymbol{\Sigma} = (\mathbf{S_0}^{-1} + \mathbf{\Phi^T R \Phi})^{-1}\)
+            \item \(\boldsymbol{\mu} = \boldsymbol{\Sigma} (\mathbf{S_0}^{-1} \mathbf{m_0} + \mathbf{\Phi^T R t})\)
+        \end{itemize}
+
+        Thus, we have \[p(\mathbf{w|t}) = \mathcal{N} \brak{\mathbf{w}|(\mathbf{S_0}^{-1} + \mathbf{\Phi^T R \Phi})^{-1}(\mathbf{S_0}^{-1} \mathbf{m_0} + \mathbf{\Phi^T R t}), (\mathbf{S_0}^{-1} + \mathbf{\Phi^T R \Phi})^{-1}}\]
 
         \item Show \[E_\mathcal{D} = \sum_{n = 1}^{N} r_n \cbrak{t_n - \mathbf{w^T \phi(x_n)}}^2 \] and find \(\mathbf{w}\) that minimizes \(E_\mathcal{D}\).
         

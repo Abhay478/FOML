@@ -7,107 +7,117 @@
     \author{Kartheek Sriram Tammana: cs21btech11028}
     \date{\today}
     
-    % \begin{abstract}
-    %     The paper describes a general class of models for ordinal data, utilising stochastic ordering to eliinate the need for assigning scores or assuming cardinality. Two models in particular, the \textit{proportional odds} and the \textit{proportional hazards} models, are of practical utility due to their conceptual simplicity.
-    % \end{abstract}
-    
     \maketitle
 
     \section{Paper Summary}
 
-    \begin{enumerate}[label=\textbf{(\Roman*)}]
-        \item Introduction
+    % \begin{enumerate}[label=\textbf{(\Roman*)}]
+    %     \item Introduction
 
-    Wall of text, will parse and write later.
+    % Wall of text, will parse and write later.
 
-    \item The Proportional Odds model
-        \begin{itemize}
-            \item The model
+    % \item The Proportional Odds model
+    %     \begin{itemize}
+    %         \item The model
             
-            The probabilities of the \(k\) ordered categories of the response variable \(Y\) are given by \(\seq{\pi}{k}\), as a function of the covariant vector \(\mathbf{x}\).
+    %         The probabilities of the \(k\) ordered categories of the response variable \(Y\) are given by \(\seq{\pi}{k}\), as a function of the covariant vector \(\mathbf{x}\).
 
-        Given the following quantities,
-        \begin{itemize}
-            \item \(j\): The paper maps each ordinal class to a contiguous interval of the real line, and \(j\) represents the class of the response variable \(Y\).
-            \item \(\kappa_j\): The cumulative odds of the response variable \(Y\) being less than or equal to \(j\).
-            \item \(\beta\): The vector of regression coefficients.
-            \item \(x\): The vector of covariates.
-        \end{itemize}
+    %     Given the following quantities,
+    %     \begin{itemize}
+    %         \item \(j\): The paper maps each ordinal class to a contiguous interval of the real line, and \(j\) represents the class of the response variable \(Y\).
+    %         \item \(\kappa_j\): The cumulative odds of the response variable \(Y\) being less than or equal to \(j\).
+    %         \item \(\beta\): The vector of regression coefficients.
+    %         \item \(x\): The vector of covariates.
+    %     \end{itemize}
 
-        the cumulative odds are given by
-        \[\boldsymbol{\kappa}_j \propto \exp \brak{- \boldsymbol{\beta^T} \mathbf{x}}\]
+    %     the cumulative odds are given by
+    %     \[\boldsymbol{\kappa}_j \propto \exp \brak{- \boldsymbol{\beta^T} \mathbf{x}}\]
 
-        with proportionality constant denoted \(\kappa_j\).
+    %     with proportionality constant denoted \(\kappa_j\).
 
-        Naturally, for a given \(j\) and the corresponding \(\boldsymbol{\kappa} = \boldsymbol{\kappa}_j\) it follows that 
-        \[
-            \boldsymbol{\frac{\kappa\brak{x_1}}{\kappa\brak{x_2}}} = \exp \brak{\boldsymbol{\beta}^T \brak{\mathbf{x_2 - x_1}}}
-        \]
+    %     Naturally, for a given \(j\) and the corresponding \(\boldsymbol{\kappa} = \boldsymbol{\kappa}_j\) it follows that 
+    %     \[
+    %         \boldsymbol{\frac{\kappa\brak{x_1}}{\kappa\brak{x_2}}} = \exp \brak{\boldsymbol{\beta}^T \brak{\mathbf{x_2 - x_1}}}
+    %     \]
 
-        Taking the logarithm and expressing in terms of cumulative probabilities, we have
-        \[
-            \lambda_j = \log\brak{\frac{\gamma_j}{1 - \gamma_j}} = \theta_j - \boldsymbol{\beta^T} \mathbf{x} \label{eq:logit}
-        \] where \( \displaystyle \gamma_j = \sum_{i = 1}^{j} \mathbf{\pi}_j\) and \(\theta_j = \log \kappa_j\). 
-        As a special case, in a two group problem, ~\ref{eq:logit} reduces to 
+    %     Taking the logarithm and expressing in terms of cumulative probabilities, we have
+    %     \[
+    %         \lambda_j = \log\brak{\frac{\gamma_j}{1 - \gamma_j}} = \theta_j - \boldsymbol{\beta^T} \mathbf{x} \label{eq:logit}
+    %     \] where \( \displaystyle \gamma_j = \sum_{i = 1}^{j} \mathbf{\pi}_j\) and \(\theta_j = \log \kappa_j\). 
+    %     As a special case, in a two group problem, ~\ref{eq:logit} reduces to 
         
-        \[\lambda_{ij} = \theta_j + (-1^i) \frac{1}{2} \Delta \qquad \forall j \in [k],\, i \in \{1, 2\} \label{eq:delta}\]
+    %     \[\lambda_{ij} = \theta_j + (-1^i) \frac{1}{2} \Delta \qquad \forall j \in [k],\, i \in \{1, 2\} \label{eq:delta}\]
     
-        where \(\Delta = \boldsymbol{\beta^T} \brak{\mathbf{x_2 - x_1}}\). \{Copilot says this, not sure. MF has not declared Delta.\}
+    %     where \(\Delta = \boldsymbol{\beta^T} \brak{\mathbf{x_2 - x_1}}\). \{Copilot says this, not sure. MF has not declared Delta.\}
 
-            \item Generalised Empirical Logit transform
+    %         \item Generalised Empirical Logit transform
             
-            Consider the data matrix with cumulative row sums \(R_{ij}\) and \(n_i = R_{ik}\). Furthermore, \( \Sigma_i R_{ij} = R_{.j}\) and \(\Sigma_i n_{ij} = n_{.j}\) We have the \(j\)th sample logit \(\tilde{\lambda}_{ij} = \log \frac{R_{ij} + 0.5}{n_i - R_{ij} + 0.5}\). The extra 0.5 is due to reduce bias and avoid zeros. 
+    %         Consider the data matrix with cumulative row sums \(R_{ij}\) and \(n_i = R_{ik}\). Furthermore, \( \Sigma_i R_{ij} = R_{.j}\) and \(\Sigma_i n_{ij} = n_{.j}\) We have the \(j\)th sample logit \(\tilde{\lambda}_{ij} = \log \frac{R_{ij} + 0.5}{n_i - R_{ij} + 0.5}\). The extra 0.5 is due to reduce bias and avoid zeros. 
         
-        The paper references the results of another paper and asserts that the expectation of the sample logit is \(\lambda_{ij} + \bigO{n_i^{-2}}\) . Let
+    %     The paper references the results of another paper and asserts that the expectation of the sample logit is \(\lambda_{ij} + \bigO{n_i^{-2}}\) . Let
 
-        This implies that for any normalised weight vector \(\mathbf{w}\), we have \[\ev{Z_i = \Sigma_j w_j \tilde{\lambda}_{ij}} = (-1)^i + \Sigma w_j \theta_j + \bigO{n_i^{-2}}\]
+    %     This implies that for any normalised weight vector \(\mathbf{w}\), we have \[\ev{Z_i = \Sigma_j w_j \tilde{\lambda}_{ij}} = (-1)^i + \Sigma w_j \theta_j + \bigO{n_i^{-2}}\]
 
-        which yields \(\ev{Z_2 - Z_1} = \Delta + \bigO{n_1^{-2}, n_2^{-2}}\). For a similar estimator, the paper references another paper and states the weights minimizing the variance of \(Z_2 - Z_1\) when \(\Delta = 0\). 
-        \[w_j \propto \gamma_j(1 - \gamma_j)(\pi_j + \pi_{j + 1})\] 
-        where \(\gamma_j = \frac{\kappa_j}{1 + \kappa_j}\) from ~\ref{eq:delta} and ~\ref{eq:logit}. Using these weights, the asymptotic variance of \(\tilde{\Delta} = Z_2 - Z_1\) is \[\var{\tilde{\Delta}} = \cbrak{\frac{n_1 n_2}{n}\sum_{j = 1}^{k - 1} \gamma_j(1 - \gamma_j)(\pi_j + \pi_{j + 1})}^{-1} + \bigO{\Delta^2} \]
+    %     which yields \(\ev{Z_2 - Z_1} = \Delta + \bigO{n_1^{-2}, n_2^{-2}}\). For a similar estimator, the paper references another paper and states the weights minimizing the variance of \(Z_2 - Z_1\) when \(\Delta = 0\). 
+    %     \[w_j \propto \gamma_j(1 - \gamma_j)(\pi_j + \pi_{j + 1})\] 
+    %     where \(\gamma_j = \frac{\kappa_j}{1 + \kappa_j}\) from ~\ref{eq:delta} and ~\ref{eq:logit}. Using these weights, the asymptotic variance of \(\tilde{\Delta} = Z_2 - Z_1\) is \[\var{\tilde{\Delta}} = \cbrak{\frac{n_1 n_2}{n}\sum_{j = 1}^{k - 1} \gamma_j(1 - \gamma_j)(\pi_j + \pi_{j + 1})}^{-1} + \bigO{\Delta^2} \]
 
-        The quantity \(Z_i\) with weights given by \[w_j \propto R_{.j}(1 - R_{.j})(n_{.j} + n_{.j + 1})\] is called the generalised empirical logistic transform for the \(i\)'th group.
-        \end{itemize}
+    %     The quantity \(Z_i\) with weights given by \[w_j \propto R_{.j}(1 - R_{.j})(n_{.j} + n_{.j + 1})\] is called the generalised empirical logistic transform for the \(i\)'th group.
+    %     \end{itemize}
 
-    \item The Proportional Hazards model
+    % \item The Proportional Hazards model
     
 
-        The hazard function is defined as the probability of failure at time \(t\), conditional on survival up to time \(t\). The proportional hazards model assumes that the hazard function is of the form 
-        \[\lambda(t) = \lambda_0(t) \exp \brak{- \boldsymbol{\beta^T} \mathbf{x}}\] 
-        where \(\mathbf{x}\) is the vector of covariates and \(\beta\) is a vector of unknown parameters. 
+    %     The hazard function is defined as the probability of failure at time \(t\), conditional on survival up to time \(t\). The proportional hazards model assumes that the hazard function is of the form 
+    %     \[\lambda(t) = \lambda_0(t) \exp \brak{- \boldsymbol{\beta^T} \mathbf{x}}\] 
+    %     where \(\mathbf{x}\) is the vector of covariates and \(\beta\) is a vector of unknown parameters. 
         
-        Thus, the survivor function takes on the form 
-        \[-\log \cbrak{S(t; \mathbf{x})} = \Lambda_0(t) \exp \brak{-\boldsymbol{\beta^T} \mathbf{x}} \label{eq:survivor}\] 
-        where \(\Lambda_0(t) = \int_{0}^{t} \lambda_0(s) ds \)
+    %     Thus, the survivor function takes on the form 
+    %     \[-\log \cbrak{S(t; \mathbf{x})} = \Lambda_0(t) \exp \brak{-\boldsymbol{\beta^T} \mathbf{x}} \label{eq:survivor}\] 
+    %     where \(\Lambda_0(t) = \int_{0}^{t} \lambda_0(s) ds \)
 
-        Analogous to the proportional odds model, we have 
-        \[ \frac{\log S(t; \mathbf{x_1})}{\log S(t; \mathbf{x_2})} = \exp \brak{\boldsymbol{\beta^T} \brak{\mathbf{x_2 - x_1}}}\].
-
-
-        For discrete data, ~\ref{eq:survivor} becomes 
-        \[-\log \cbrak{1 - \gamma_j (\mathbf{x})} = \exp \brak{\theta_j - \boldsymbol{\beta^T x}}\]
-
-        Taking logarithm, we obtain the complementary log-log transform.
-        \[\log \sbrak{ - \log \cbrak{1 - \gamma_j (\mathbf{x})}} = \theta_j - \boldsymbol{\beta^T x} \]
+    %     Analogous to the proportional odds model, we have 
+    %     \[ \frac{\log S(t; \mathbf{x_1})}{\log S(t; \mathbf{x_2})} = \exp \brak{\boldsymbol{\beta^T} \brak{\mathbf{x_2 - x_1}}}\].
 
 
-    \item Properties of related linear models
+    %     For discrete data, ~\ref{eq:survivor} becomes 
+    %     \[-\log \cbrak{1 - \gamma_j (\mathbf{x})} = \exp \brak{\theta_j - \boldsymbol{\beta^T x}}\]
+
+    %     Taking logarithm, we obtain the complementary log-log transform.
+    %     \[\log \sbrak{ - \log \cbrak{1 - \gamma_j (\mathbf{x})}} = \theta_j - \boldsymbol{\beta^T x} \]
+
+
+    % \item Properties of related linear models
     
-        Both the above models have the same general form, namely \[link\cbrak{\gamma_j(\mathbf{x})} = \theta_j - \boldsymbol{\beta^T x} \]
+    %     Both the above models have the same general form, namely \[link\cbrak{\gamma_j(\mathbf{x})} = \theta_j - \boldsymbol{\beta^T x} \]
 
-        The paper then suggests a few alternative link functions, such as the inverse Gaussian or the inverse Cauchy transform.
+    %     The paper then suggests a few alternative link functions, such as the inverse Gaussian or the inverse Cauchy transform.
 
-        The paper goes on to discuss invariances of the models, and proposes invariance under reversal of the ordering of categories as an appropriate property. 
+    %     The paper goes on to discuss invariances of the models, and proposes invariance under reversal of the ordering of categories as an appropriate property. 
 
-    \item Elaboration
+    % \item Elaboration
     
-    The rest of the paper contains a more thorough analysis of the two above models.
+    % The rest of the paper contains a more thorough analysis of the two above models.
 
-    \end{enumerate}
+    % \end{enumerate}
+
+    \begin{itemize}
+        \item The paper proposes two models for ordinal data, namely the proportional odds model and the proportional hazards model.
+        \item The proportional odds model is a generalisation of the logistic regression model for ordinal data. Here, the odds of the response variable \(Y \leq j\) are given by \[\mathbf{\kappa}_j = \kappa_j \exp (- \boldsymbol{\beta^T} \mathbf{x})\].
+        \item The proportional hazards model considers a hazard function \(\lambda(t)\), which expresses the probability of failure at time \(t\), of the form \[\lambda(t) = \lambda_0(t) \exp \brak{- \boldsymbol{\beta^T} \mathbf{x}}\].
+        \item The paper proposes a generalised empirical logit transform for the two models.
+        \item The paper also discusses \begin{itemize}
+            \item The properties of the two models, proposing a few alternative link functions.
+            \item Invariances of the models under reversal of the ordering.
+            \item Asymptotic properties of the two models.
+            \item Parameter estimation for both models.
+            \item Application of the models to real data.
+        \end{itemize} 
+    \end{itemize}
 
     \section{Parameter Estimation}
 
-    
+    Kartheek.
 
     \section{Code}
 

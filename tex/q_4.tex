@@ -61,15 +61,17 @@ def update(w, Phi, t):
 
         We know that a function is concave if it's Hessian is positive definite. Thus, it is sufficient to prove positive-definiteness of the Hessian.
 
-        Expanding \(u^T \mathbf{H} u\), we can prove positive-definiteness \begin{align}
+        Expanding \( \mathbf{u^T H u} \), we can prove positive-definiteness \begin{align}
             \begin{split}
-                u^T \mathbf{H} u &= u^T \mathbf{\Phi^T R \Phi} u \\
-                &= (u^T \mathbf{\Phi^T}) \mathbf{R} (\mathbf{\Phi u}) \\
-                &= \sum_{n = 1}^{N} u^T \mathbf{\phi_n}^T R_{nn} \mathbf{\phi_n u} \\
-                &= \sum_{n = 1}^{N} R_{nn} \brak{\mathbf{\phi_n u}}^2 \\
+                \mathbf{u^T H u} &= \mathbf{u^T \Phi^T R \Phi u} \\
+                &= (\mathbf{u^T \Phi^T}) \mathbf{R} (\mathbf{\Phi u}) \\
+                &= \sum_{n = 1}^{N} u_n \mathbf{\phi_n}^T R_{nn} \mathbf{\phi_n} u \\
+                &= \sum_{n = 1}^{N} R_{nn} \norm{\phi_n}^2 \brak{u_n}^2 \\
                 &> 0
             \end{split}
         \end{align}
+
+        We have used the fact that \(R_{nn} > 0\) and \(\mathbf{u} \neq 0\). Thus, the Hessian is positive-definite, and the function is concave-up with unique minimum.
 
 
     \end{enumerate}
