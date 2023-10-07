@@ -59,7 +59,7 @@ def update(w, Phi, t):
         \item 
         With the Hessian: \[\mathbf{H} = \mathbf{\Phi^T R \Phi}\]
 
-        We know that a function is concave if it's Hessian is positive definite. Thus, it is sufficient to prove positive-definiteness of the Hessian.
+        We know that a function is convex if its Hessian is positive definite. Thus, it is sufficient to prove positive-definiteness of the Hessian.
 
         Expanding \( \mathbf{u^T H u} \), we can prove positive-definiteness \begin{align}
             \begin{split}
@@ -71,7 +71,7 @@ def update(w, Phi, t):
             \end{split}
         \end{align}
 
-        We have used the fact that \(R_{nn} > 0\) and \(\mathbf{u} \neq 0\). Thus, the Hessian is positive-definite, and the function is concave-up with unique minimum.
+        We have used the fact that \(R_{nn} > 0\) and \(\mathbf{u} \neq 0\). Thus, the Hessian is positive-definite, and the function is convex with unique minimum.
 
 
     \end{enumerate}

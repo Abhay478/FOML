@@ -1,4 +1,4 @@
-\documentclass{amsart}
+\documentclass[reqno]{amsart}
 \input{cheatsheet.tex}
 
 \begin{document}
@@ -11,7 +11,7 @@
         \item Derive the expression of likelihood and prior for a heteroscedastic setting for a single data point with input \(\mathbf{x_n}\) and output \(t_n\).
         
         Consider the following formula for the target variable:
-        \[t = y(\mathbf{x, w}) + \epsilon(\mathbf{x})\] where \(\epsilon\) is a zero mean Gaussian random variable with precision \(\beta(\mathbf{x})\). 
+        \[t = y(\mathbf{x, w}) + \epsilon(\mathbf{x})\] where \(\epsilon\) is a zero mean Gaussian random variable with precision \(\beta(\mathbf{x})\) and \(y\) is a deterministic function. 
         Due to heteroscedasticity, the Gaussian noise is dependent on the input \(\mathbf{x}\). 
         
         Due to the properties of Gaussian distribution, \(t\) is also normal, with its distrbution i.e. the likelihood function given by:
@@ -35,7 +35,7 @@
             \equiv \ln p &= \text{constant} + \frac{1}{2} \sum_{n = 1}^{N} \beta_n \brak{t_n - y(\mathbf{x_n, w})}^2 \label{eq:ml}
         \end{align}
 
-        Introducing the matrix \(\mathbf{R}\) with \(R_{ii} = \beta_i\).
+        Defining the matrix \(\mathbf{R}\) with \(R_{ii} = \beta_i\).
 
         % which is equivalent to minimizing the weighted sum of squared errors.
 
@@ -71,10 +71,8 @@
         The objective function for MAP estimation is given by the normal distrbution with mean \(\boldsymbol{\mu}\) and variance \(\boldsymbol{\Sigma}\) where 
 
         % \[p(\mathbf{w|t}) = \mathcal{N}(\mathbf{w}|\mu, \Sigma)\]
-        \begin{itemize}
-            \item \(\boldsymbol{\Sigma} = (\mathbf{S_0}^{-1} + \mathbf{\Phi^T R \Phi})^{-1}\)
-            \item \(\boldsymbol{\mu} = \boldsymbol{\Sigma} (\mathbf{S_0}^{-1} \mathbf{m_0} + \mathbf{\Phi^T R t})\)
-        \end{itemize}
+            \(\boldsymbol{\Sigma} = (\mathbf{S_0}^{-1} + \mathbf{\Phi^T R \Phi})^{-1}\)
+            \(\boldsymbol{\mu} = \boldsymbol{\Sigma} (\mathbf{S_0}^{-1} \mathbf{m_0} + \mathbf{\Phi^T R t})\)
 
         Thus, we have \[p(\mathbf{w|t}) = \mathcal{N} \brak{\mathbf{w}|(\mathbf{S_0}^{-1} + \mathbf{\Phi^T R \Phi})^{-1}(\mathbf{S_0}^{-1} \mathbf{m_0} + \mathbf{\Phi^T R t}), (\mathbf{S_0}^{-1} + \mathbf{\Phi^T R \Phi})^{-1}}\]
 
