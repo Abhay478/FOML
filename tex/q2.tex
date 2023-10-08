@@ -101,19 +101,53 @@
 
     % \end{enumerate}
 
-    \begin{itemize}
-        \item The paper proposes two models for ordinal data, namely the proportional odds model and the proportional hazards model.
-        \item The proportional odds model is a generalisation of the logistic regression model for ordinal data. Here, the odds of the response variable \(Y \leq j\) are given by \[\mathbf{\kappa}_j = \kappa_j \exp (- \boldsymbol{\beta^T} \mathbf{x})\].
-        \item The proportional hazards model considers a hazard function \(\lambda(t)\), which expresses the probability of failure at time \(t\), of the form \[\lambda(t) = \lambda_0(t) \exp \brak{- \boldsymbol{\beta^T} \mathbf{x}}\].
-        \item The paper proposes a generalised empirical logit transform for the two models.
-        \item The paper also discusses \begin{itemize}
-            \item The properties of the two models, proposing a few alternative link functions.
-            \item Invariances of the models under reversal of the ordering.
-            \item Asymptotic properties of the two models.
-            \item Parameter estimation for both models.
-            \item Application of the models to real data.
-        \end{itemize} 
-    \end{itemize}
+    \begin{enumerate}[label=\textbf{(\alph*)}]
+        \item \begin{itemize}
+            \item The paper proposes two models for ordinal data, namely the proportional odds model and the proportional hazards model.
+            \item The proportional odds model is a generalisation of the logistic regression model for ordinal data. Here, the odds of the response variable \(Y \leq j\) are given by \[\mathbf{\kappa}_j = \kappa_j \exp (- \boldsymbol{\beta^T} \mathbf{x})\].
+            \item The proportional hazards model considers a hazard function \(\lambda(t)\), which expresses the probability of failure at time \(t\), of the form \[\lambda(t) = \lambda_0(t) \exp \brak{- \boldsymbol{\beta^T} \mathbf{x}}\].
+            \item The paper proposes a generalised empirical logit transform, as a generalisation of the two models. The quantity \(Z_{i} = \Sigma_j w_j \tilde{\lambda}_{ij}\), with 
+            weights
+            \[w_j \propto R_{.j}(n - R_{.j})(n_{.j} + n_{.j+1})\]
+            and the logit transform
+            \[\tilde{\lambda}_{ij} = \ln \brak{\frac{R_{ij} + \inv{2}}{n_i - R_{ij} + \inv{2}}}\]
+            where the \(R\) terms are various cumulatives of empirical data, is called the generalised empirical logit transform for the \(i\)'th group.
+            
+            \item The paper also discusses \begin{itemize}
+                \item The properties of the two models, proposing a few alternative link functions.
+                \item Invariances of the models under reversal of the ordering.
+                \item Asymptotic properties of the two models.
+                \item Parameter estimation for both models.
+                \item Application of the models to real data.
+            \end{itemize} 
+        \end{itemize}
+        \item Differences between Ordinal Regression, Multiclass classification and Linear Regression.
+        
+        % \begin{itemize}
+        %     \item Ordinal regression is a generalisation of logistic regression for ordinal data. It is used when the response variable is ordinal, i.e. it has a natural ordering. 
+        %     \item Multiclass classification is used when the response variable is categorical, i.e. it has no natural ordering. 
+        %     \item Linear regression is used when the response variable is continuous.
+        % \end{itemize}
+
+       \begin{center}
+         \begin{tabular}{|c|c|c|c|}
+            \hline
+            &Ordinal & Multiclass & Linear \\
+            \hline
+            Response variable & Ordinal & Categorical & Continuous \\
+            Link function & Logit & Softmax & Identity \\
+            Loss function & Cross-entropy & Cross-entropy & Mean squared error \\
+            Optimisation technique & GD & GD & Closed form \\
+            Categories & Categories have relative order & Classes distinct & No classes \\
+            Variables & Uses cumulative probabilities & Uses probabilities & Uses values \\
+            \hline
+         \end{tabular}
+       \end{center}
+
+       
+    \end{enumerate}
+
+
 
     \section{Parameter Estimation}
 
@@ -123,7 +157,7 @@
     We then have the likelihood function \(\boldsymbol{\kappa}_j = \kappa_j \exp \brak{\boldsymbol{\beta^T}\mathbf{x}}\), which we can reframe as \begin{align}
         \begin{split}
             \frac{\gamma_j}{1 - \gamma_j} &= \exp \brak{\theta_j - \boldsymbol{\beta^T}\mathbf{x}} \\
-            \implies \gamma_{j + 1} &= \inv{1 + \exp \brak{\theta_j - \boldsymbol{\beta^T}\mathbf{x}}} 
+            \implies \gamma_{j} &= \inv{1 + \exp \brak{\boldsymbol{\beta^T}\mathbf{x} - \theta_j}} 
         \end{split}
     \end{align}
     where we set \(\theta_0 = 0\).
@@ -134,8 +168,8 @@
         \begin{split}
             p(\mathbf{y}|\mathbf{x}, \boldsymbol{\beta}) &= \prod_{j = 1}^{k} \pi_j^{n_j} \\
             &= \pi_1^{n_1} \prod_{j = 1}^{k-1} (\gamma_{j + 1} - \gamma_j)^{n_{j + 1}} \\
-            &= \pi_1^{n_1} \prod_{j = 1}^{k} (\gamma_{j + 1} - \gamma_j)^{R_{j + 1} - R_j}  \\
-            &= \prod_{n = 1}^{k} \brak{\frac{\gamma_j}{\gamma_{j + 1}}}^{R_j} \brak{1 - \frac{\gamma_j}{\gamma_{j + 1}}}^{R_{j + 1} - R_j} \\
+            &= \pi_1^{n_1} \prod_{j = 1}^{k-1} (\gamma_{j + 1} - \gamma_j)^{R_{j + 1} - R_j}  \\
+            &= \prod_{n = 1}^{k-1} \brak{\frac{\gamma_j}{\gamma_{j + 1}}}^{R_j} \brak{1 - \frac{\gamma_j}{\gamma_{j + 1}}}^{R_{j + 1} - R_j} \\
         \end{split}
     \end{align}
 
@@ -143,21 +177,27 @@
     \begin{align}
         \begin{split}
             -\ln p(\mathbf{y}|\mathbf{x}, \boldsymbol{\beta}) &= 
-            \sum_{j = 1}^{k} \sbrak{R_j \ln \brak{\frac{1 + \exp \brak{\theta_{j - 1} - \boldsymbol{\beta^T}\mathbf{x}}}{1 + \exp \brak{\theta_j - \boldsymbol{\beta^T}\mathbf{x}}}} 
-            - (R_{j + 1} - R_j) \brak{\ln \brak{\frac{\e{\theta_j} - \e{\theta_{j - 1}}}{1 + \exp \brak{\theta_j - \boldsymbol{\beta^T}\mathbf{x}}}} - \boldsymbol{\beta^T}\mathbf{x}}} \\
-            &= \sum_{j = 1}^{k} \sbrak{R_j \ln \brak{\frac{1 + \boldsymbol{\kappa}_{j - 1}}{1 + \boldsymbol{\kappa}_j}} 
-            - (R_{j + 1} - R_j) \ln \brak{\frac{\boldsymbol{\kappa}_j - \boldsymbol{\kappa}_{j - 1}}{1 + \boldsymbol{\kappa}_j}}} 
+            \sum_{j = 1}^{k} \sbrak{R_j \ln \brak{\frac{1 + \exp \brak{\boldsymbol{\beta^T}\mathbf{x} - \theta_j}}{1 + \exp \brak{\boldsymbol{\beta^T}\mathbf{x} - \theta_{j+1}}}} 
+            - (R_{j + 1} - R_j) \brak{\ln \brak{\frac{\e{-\theta_{j + 1}} - \e{-\theta_j}}{1 + \exp \brak{\boldsymbol{\beta^T}\mathbf{x} - \theta_{j+1}}}} + \boldsymbol{\beta^T}\mathbf{x}}} \\
+            % &= \sum_{j = 1}^{k} \sbrak{R_j \ln \brak{\frac{\boldsymbol{\kappa}_{j+1}}{\boldsymbol{\kappa}_j} \cdot \frac{1 + \boldsymbol{\kappa}_{j}}{1 + \boldsymbol{\kappa}_{j+1}}} 
+            % - (R_{j + 1} - R_j) \ln \brak{\frac{\boldsymbol{\kappa}_j - \boldsymbol{\kappa}_{j + 1}}{\boldsymbol{\kappa}_{j}(1 + \boldsymbol{\kappa}_{j+1})}}} 
         \end{split}
     \end{align}
 
-    Differentiating and equating to 0 yields 
+    % Differentiating and equating to 0 yields 
     % \begin{align}
     %     \begin{split}
             
     %     \end{split}
     % \end{align}
 
-    This does not have a closed form solution. We can use gradient descent to find the optimal weights \(\boldsymbol{\beta}\) or intervals \(\boldsymbol{\theta} = \myvec{\theta_1 & \ldots & \theta_{k - 1}}^T\).
+    We can use gradient descent to find the optimal weights \(\boldsymbol{\beta}\) or intervals \(\boldsymbol{\theta} = \myvec{\theta_1 & \ldots & \theta_{k - 1}}^T\). For \(\boldsymbol{\theta}\), 
+
+    \begin{align}
+        \begin{split}
+            \nabla \ln p(\mathbf{y}|\mathbf{x}, \boldsymbol{\theta}) &= \sum_{j = 1}^{k} \sbrak{}
+        \end{split}
+    \end{align}
 
     \section{Code}
 
