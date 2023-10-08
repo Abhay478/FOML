@@ -45,8 +45,8 @@
                     \cpr{\mathbf{t}}{\mathbf{X}, \mathbf{w}, \boldsymbol{\beta}}  
                     &= \prod_{n = 1}^{N} p\brak{t_n | \mathbf{x_n}, \mathbf{w}, \boldsymbol{\beta}} \\
                     &= \prod_{n = 1}^{N} \mathcal{N} (t_n | \mathbf{w^T} \boldsymbol{\phi}(\mathbf{x}_n), \beta_n^{-1}) \\
-                    &= \exp \cbrak{- \frac{1}{2} \sum_{n = 1}^{N} \beta_n \brak{t_n - \mathbf{w^T} \boldsymbol{\phi}(\mathbf{x}_n)}^2} \\
-                    &= \exp \cbrak{- \frac{1}{2} \brak{\mathbf{t} - \boldsymbol{\Phi^T w}}^T \mathbf{R} \brak{\mathbf{t} - \boldsymbol{\Phi^T w}}} \\
+                    &= \frac{\abs{\mathbf{R}}}{(2\pi)^{\frac{N}{2}}}\exp \cbrak{- \frac{1}{2} \sum_{n = 1}^{N} \beta_n \brak{t_n - \mathbf{w^T} \boldsymbol{\phi}(\mathbf{x}_n)}^2} \\
+                    &= \frac{\abs{\mathbf{R}}}{(2\pi)^{\frac{N}{2}}}\exp \cbrak{- \frac{1}{2} \brak{\mathbf{t} - \boldsymbol{\Phi w}}^T \mathbf{R} \brak{\mathbf{t} - \boldsymbol{\Phi w}}} \\
                     &= \mathcal{N} (\mathbf{t}|\mathbf{\Phi w, R^{-1}}) \label{eq:ml} 
                 \end{split}
                 % \equiv \ln p &= \text{constant} + \frac{1}{2} \sum_{n = 1}^{N} \beta_n \brak{t_n - y(\mathbf{x_n, w})}^2 
