@@ -117,7 +117,37 @@
 
     \section{Parameter Estimation}
 
-    Kartheek.
+    % Kartheek.
+    Revising the notation from the paper, we have the probabilities of the \(k\) ordered categories of the response variable \(Y\) given by \(\seq{\pi}{k}\), as a function of the covariant vector \(\mathbf{x}\), and their cumulative probabilities given by \(\displaystyle \gamma_j = \sum_{i = 1}^{j} \pi_j\). The cumulative odds are thus \(\boldsymbol{\kappa}_j = \frac{\gamma_j}{1 - \gamma_j}\).
+
+    We then have the likelihood function \(\boldsymbol{\kappa}_j = \kappa_j \exp \brak{\boldsymbol{\beta^T}\mathbf{x}}\), which we can reframe as \begin{align}
+        \begin{split}
+            \frac{\gamma_j}{1 - \gamma_j} &= \exp \brak{\theta_j - \boldsymbol{\beta^T}\mathbf{x}} \\
+            \implies \gamma_{j + 1} &= \inv{1 + \exp \brak{\theta_j - \boldsymbol{\beta^T}\mathbf{x}}} 
+        \end{split}
+    \end{align}
+    where we set \(\theta_0 = 0\).
+    We also define \(\displaystyle R_j = \sum_{i = 1}^{j} n_i\).
+
+    We have the likelihood function:
+    \begin{align}
+        \begin{split}
+            p(\mathbf{y}|\mathbf{x}, \boldsymbol{\beta}) &= \prod_{j = 1}^{k} \pi_j^{n_j} \\
+            &= \pi_1^{n_1} \prod_{j = 1}^{k} (\gamma_{j + 1} - \gamma_j)^{n_{j + 1}} \\
+            &= \pi_1^{n_1} \prod_{j = 1}^{k} (\gamma_{j + 1} - \gamma_j)^{R_{j + 1} - R_j}  \\
+            &= \prod_{n = 1}^{k} \brak{\frac{\gamma_j}{\gamma_{j + 1}}}^{R_j} \brak{1 - \frac{\gamma_j}{\gamma_{j + 1}}}^{R_{j + 1} - R_j} \\
+        \end{split}
+    \end{align}
+
+    Taking the logarithm, we have
+    \begin{align}
+        \begin{split}
+            -\ln p(\mathbf{y}|\mathbf{x}, \boldsymbol{\beta}) &= 
+            \sum_{j = 1}^{k} R_j \ln \brak{\frac{1 + \exp \brak{\theta_{j - 1} - \boldsymbol{\beta^T}\mathbf{x}}}{1 + \exp \brak{\theta_j - \boldsymbol{\beta^T}\mathbf{x}}}} - (R_{j + 1} - R_j) \brak{\ln \brak{\frac{\e{\theta_j} - \e{\theta_{j - 1}}}{1 + \exp \brak{\theta_j - \boldsymbol{\beta^T}\mathbf{x}}}} - \boldsymbol{\beta^T}\mathbf{x}}
+        \end{split}
+    \end{align}
+
+    This does not have a closed form solution. We can use gradient descent to find the optimal \(\boldsymbol{\beta}\).
 
     \section{Code}
 
