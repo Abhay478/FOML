@@ -18,8 +18,9 @@
         \end{equation}
         
         Note that \(y_n = \sigma(\mathbf{w^T}\boldsymbol{\phi}_n)\) where \(\sigma\) is the sigmoid function and \(\boldsymbol{\phi}_n\) are the features. 
+        Furthermore, we have the design matrix \(\mathbf{\Phi}\) with \(\boldsymbol{\phi}_n^T\) as its n'th row.
 
-        Furthremore, we have the design matrix \(\mathbf{\Phi}\) with \(\boldsymbol{\phi}_n^T\) as its n'th row.
+        For both instances of differentiation, we use the fact that \[\frac{d \sigma(a)}{da} = \sigma(a)\brak{1 - \sigma(a)}\]
 
         Taking gradients of ~\eqref{eq:cross-entropy} with respect to \(\mathbf{w}\), we have
         \begin{itemize}
