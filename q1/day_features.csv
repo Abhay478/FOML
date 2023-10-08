@@ -1,0 +1,8 @@
+Day,9:00?,12:00?,2:30?,Breakfast,Lunch,Tea,Dinner
+Sunday,0,0,0,7,6,7,9
+Monday,0,1,0,6,4,7,6
+Tuesday,1,1,1,7,6,8,8
+Wednesday,0,1,1,8,7,6,10
+Thursday,0,1,1,8,8,6,8
+Friday,1,1,1,7,8,8,10
+Saturday,0,0,0,8,6,6,10
