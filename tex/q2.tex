@@ -22,7 +22,7 @@
                 where \(\pi_j\) is the probability of the \(j\)'th category of the response variable \(Y\), and \(\mathbf{x}\) is the covariant vector.
                 
                 The paper also defines the cumulative odds ratio \(\boldsymbol{\kappa}_{j, j + 1} = \frac{\boldsymbol{\kappa}_j}{\boldsymbol{\kappa}_{j + 1}}\), which is the odds of the \(j\)'th category over the \(j + 1\)'th category.
-                
+
                 \item The proportional hazards model considers a hazard function \(\lambda(t) = \), which expresses the probability of failure at time \(t\), of the form \[\lambda(t) = \lambda_0(t) \exp \brak{- \boldsymbol{\beta^T} \mathbf{x}}\]
                 
                 From this, we define the Survival function \(S(t) = \exp \brak{\Lambda_0 \exp \brak{- \boldsymbol{\beta^T} \mathbf{x}} dt}\) with \(\Lambda_0(t) = - \int_{0}^{t} \lambda_0(t) dt \) which represents the probabiltiy of surviving beyond time t.
@@ -56,12 +56,28 @@
                 Link function & Logit & Softmax & Identity \\
                 Loss function & Cross-entropy & Cross-entropy & Mean squared error \\
                 Optimisation technique & GD & GD & Closed form \\
-                Categories & Categories have relative order & Classes distinct & No classes \\
-                Variables & Uses cumulative probabilities & Uses probabilities & Uses values \\
+                Categories & Categories have relative order & Classes distinct & No classes \\ 
                 \hline
              \end{tabular}
            \end{center}
-    
+
+           They all have different likelihood functions also:
+
+           \begin{itemize}
+            \item Ordinal regression: Given in next part.
+            \item Logistic Multiclass classification: \[p(\mathbf{t}|\pi, \boldsymbol{\mu}_1, \boldsymbol{\mu}_2, \mathbf{\Sigma}) = \prod_{n = 1}^{N} \sbrak{\pi \mathcal{N} \brak{\mathbf{x}_n|\boldsymbol{\mu}_1, \mathbf{\Sigma}}}^{t_n}\sbrak{(1 - \pi)\mathcal{N} \brak{\mathbf{x}_n|\boldsymbol{\mu}_2, \mathbf{\Sigma}}}^{1 - t_n} \] 
+            \item Linear Regression: \[p(\mathbf{t}|\mathbf{X, w}, \boldsymbol{\beta}) = \mathcal{N}\brak{\mathbf{t}|\mathbf{w^T}\boldsymbol{\phi}(\mathbf{x}_n), \boldsymbol{\beta}^{-1}}\]
+           \end{itemize}
+
+           Where all the variables have the usual meaning.
+
+        %    Also, only ordinal regression expresses the output distribution with cumulative odds of the response variable, oth the others use .
+
+        In the ordinal regression models, the cumulative odds of the output variable are expressed as exponential in the weights \(\boldsymbol{\beta}\) and the covariant vector \(\mathbf{x}\). 
+        
+        In the logistic regression model, the probability distribution of the output is expressed as exponential in \(\boldsymbol{\beta}^T \mathbf{x}\). 
+        
+        In the linear regression model, the probability distribution of the output is linear in the weights. 
            
         \end{enumerate}
         \item \question Parameter Estimation
