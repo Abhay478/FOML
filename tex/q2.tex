@@ -133,18 +133,29 @@
     \begin{align}
         \begin{split}
             p(\mathbf{y}|\mathbf{x}, \boldsymbol{\beta}) &= \prod_{j = 1}^{k} \pi_j^{n_j} \\
-            &= \pi_1^{n_1} \prod_{j = 1}^{k} (\gamma_{j + 1} - \gamma_j)^{n_{j + 1}} \\
+            &= \pi_1^{n_1} \prod_{j = 1}^{k-1} (\gamma_{j + 1} - \gamma_j)^{n_{j + 1}} \\
             &= \pi_1^{n_1} \prod_{j = 1}^{k} (\gamma_{j + 1} - \gamma_j)^{R_{j + 1} - R_j}  \\
             &= \prod_{n = 1}^{k} \brak{\frac{\gamma_j}{\gamma_{j + 1}}}^{R_j} \brak{1 - \frac{\gamma_j}{\gamma_{j + 1}}}^{R_{j + 1} - R_j} \\
         \end{split}
     \end{align}
 
     Taking the logarithm, we have
-    \begin{equation}
-        -\ln p(\mathbf{y}|\mathbf{x}, \boldsymbol{\beta}) = 
-        \sum_{j = 1}^{k} \sbrak{R_j \ln \brak{\frac{1 + \exp \brak{\theta_{j - 1} - \boldsymbol{\beta^T}\mathbf{x}}}{1 + \exp \brak{\theta_j - \boldsymbol{\beta^T}\mathbf{x}}}} 
-        - (R_{j + 1} - R_j) \brak{\ln \brak{\frac{\e{\theta_j} - \e{\theta_{j - 1}}}{1 + \exp \brak{\theta_j - \boldsymbol{\beta^T}\mathbf{x}}}} - \boldsymbol{\beta^T}\mathbf{x}}}
-    \end{equation}
+    \begin{align}
+        \begin{split}
+            -\ln p(\mathbf{y}|\mathbf{x}, \boldsymbol{\beta}) &= 
+            \sum_{j = 1}^{k} \sbrak{R_j \ln \brak{\frac{1 + \exp \brak{\theta_{j - 1} - \boldsymbol{\beta^T}\mathbf{x}}}{1 + \exp \brak{\theta_j - \boldsymbol{\beta^T}\mathbf{x}}}} 
+            - (R_{j + 1} - R_j) \brak{\ln \brak{\frac{\e{\theta_j} - \e{\theta_{j - 1}}}{1 + \exp \brak{\theta_j - \boldsymbol{\beta^T}\mathbf{x}}}} - \boldsymbol{\beta^T}\mathbf{x}}} \\
+            &= \sum_{j = 1}^{k} \sbrak{R_j \ln \brak{\frac{1 + \boldsymbol{\kappa}_{j - 1}}{1 + \boldsymbol{\kappa}_j}} 
+            - (R_{j + 1} - R_j) \ln \brak{\frac{\boldsymbol{\kappa}_j - \boldsymbol{\kappa}_{j - 1}}{1 + \boldsymbol{\kappa}_j}}} 
+        \end{split}
+    \end{align}
+
+    Differentiating and equating to 0 yields 
+    % \begin{align}
+    %     \begin{split}
+            
+    %     \end{split}
+    % \end{align}
 
     This does not have a closed form solution. We can use gradient descent to find the optimal weights \(\boldsymbol{\beta}\) or intervals \(\boldsymbol{\theta} = \myvec{\theta_1 & \ldots & \theta_{k - 1}}^T\).
 
