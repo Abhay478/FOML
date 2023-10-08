@@ -140,14 +140,13 @@
     \end{align}
 
     Taking the logarithm, we have
-    \begin{align}
-        \begin{split}
-            -\ln p(\mathbf{y}|\mathbf{x}, \boldsymbol{\beta}) &= 
-            \sum_{j = 1}^{k} R_j \ln \brak{\frac{1 + \exp \brak{\theta_{j - 1} - \boldsymbol{\beta^T}\mathbf{x}}}{1 + \exp \brak{\theta_j - \boldsymbol{\beta^T}\mathbf{x}}}} - (R_{j + 1} - R_j) \brak{\ln \brak{\frac{\e{\theta_j} - \e{\theta_{j - 1}}}{1 + \exp \brak{\theta_j - \boldsymbol{\beta^T}\mathbf{x}}}} - \boldsymbol{\beta^T}\mathbf{x}}
-        \end{split}
-    \end{align}
+    \begin{equation}
+        -\ln p(\mathbf{y}|\mathbf{x}, \boldsymbol{\beta}) = 
+        \sum_{j = 1}^{k} \sbrak{R_j \ln \brak{\frac{1 + \exp \brak{\theta_{j - 1} - \boldsymbol{\beta^T}\mathbf{x}}}{1 + \exp \brak{\theta_j - \boldsymbol{\beta^T}\mathbf{x}}}} 
+        - (R_{j + 1} - R_j) \brak{\ln \brak{\frac{\e{\theta_j} - \e{\theta_{j - 1}}}{1 + \exp \brak{\theta_j - \boldsymbol{\beta^T}\mathbf{x}}}} - \boldsymbol{\beta^T}\mathbf{x}}}
+    \end{equation}
 
-    This does not have a closed form solution. We can use gradient descent to find the optimal \(\boldsymbol{\beta}\).
+    This does not have a closed form solution. We can use gradient descent to find the optimal weights \(\boldsymbol{\beta}\) or intervals \(\boldsymbol{\theta} = \myvec{\theta_1 & \ldots & \theta_{k - 1}}^T\).
 
     \section{Code}
 
