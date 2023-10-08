@@ -85,14 +85,14 @@
         \solution
     Revising the notation from the paper, we have the probabilities of the \(k\) ordered categories of the response variable \(Y\) given by \(\seq{\pi}{k}\), as a function of the covariant vector \(\mathbf{x}\), and their cumulative probabilities given by \(\displaystyle \gamma_j = \sum_{i = 1}^{j} \pi_j\). The cumulative odds are thus \(\boldsymbol{\kappa}_j = \frac{\gamma_j}{1 - \gamma_j}\).
 
-    We then have the likelihood function \(\boldsymbol{\kappa}_j = \kappa_j \exp \brak{\boldsymbol{\beta^T}\mathbf{x}}\), which we can reframe as \begin{align}
+    We then have \(\boldsymbol{\kappa}_j = \kappa_j \exp \brak{\boldsymbol{\beta^T}\mathbf{x}}\), which we can reframe as \begin{align}
         \begin{split}
             \frac{\gamma_j}{1 - \gamma_j} &= \exp \brak{\theta_j - \boldsymbol{\beta^T}\mathbf{x}} \\
             \implies \gamma_{j} &= \inv{1 + \exp \brak{\boldsymbol{\beta^T}\mathbf{x} - \theta_j}} 
         \end{split}
     \end{align}
     where we set \(\theta_0 = 0\).
-    We also define \(\displaystyle R_j = \sum_{i = 1}^{j} n_i\).
+    Considering a single multinomial observation \tup{n}{k} whose sum is \(n\), we also define \(\displaystyle R_j = \sum_{i = 1}^{j} n_i\).
 
     We have the likelihood function:
     \begin{align}
