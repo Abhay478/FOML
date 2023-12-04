@@ -1,5 +1,3 @@
 **/data
 **/.DS_Store
-**/*.csv
-!*_pred.csv
 *.zip
